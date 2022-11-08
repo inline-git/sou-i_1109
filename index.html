@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sou-i 予約フォーム</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+	<link rel="stylesheet" type="text/css" href="jquery.datetimepicker.css" />
+</head>
+<body>
+
+    <form class="w-75 mx-auto">
+        <p class="mt-3">お名前</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="name" placeholder="" required>
+        </div>
+        <p class="mt-3">電話番号</p>
+        <div>
+            <input type="number" class="form-control w-100 mt-1" name="phone" required>
+        </div>
+        <p class="mt-3">ご希望メニュー</p>
+        <div>
+        <select class="form-control w-100 mt-1" name="smenu">
+		<option value="カット">カット</option>
+		<option value="カット＋カラー">カット＋カラー</option>
+		<option value="カット＋トリートメント">カット＋トリートメント</option>
+		<option value="カット＋ヘッドスパ">カット＋ヘッドスパ</option>
+		<option value="カット＋カラー＋ヘッドスパ">カット＋カラー＋ヘッドスパ</option>
+		<option value="カット＋パーマ">カット＋パーマ</option>
+		<option value="カット＋パーマ＋ヘッドスパ">カット＋パーマ＋ヘッドスパ</option>
+		<option value="マツエク">マツエク</option>
+		<option value="フェイシャル">フェイシャル</option>
+		</select>
+        </div>
+        <p class="mt-3">担当者</p>
+        <div>
+        <select class="form-control w-100 mt-1" name="stylist">
+		<option value="指名なし">指名なし</option>
+		<option value="浜辺　都子">浜辺　都子</option>
+		<option value="齋藤　圭紀">齋藤　圭紀</option>
+		<option value="飯沼　美里">飯沼　美里</option>
+		<option value="川田　綾子">川田　綾子</option>
+		<option value="田野辺　武">田野辺　武</option>
+		<option value="長島　理桜香">長島　理桜香</option>
+		<option value="東岡　珠澪">東岡　珠澪</option>
+		<option value="金野　未空">金野　未空</option>
+		<option value="福士　江梨花">福士　江梨花</option>
+		</select>
+        </div>
+        <p class="mt-3">ご希望日時</p>
+        <div>
+        <input class="form-control w-100 mt-1" type="text" id="schedule" name="schedule" value="第１希望" readonly />
+        </div>
+		<p class="mt-3">ご希望日時</p>
+        <div>
+        <input class="form-control w-100 mt-1" type="text" id="schedule2" name="schedule2" value="第２希望" readonly />
+        </div>
+		<p class="mt-3">ご希望日時</p>
+        <div>
+        <input class="form-control w-100 mt-1" type="text" id="schedule3" name="schedule3" value="第３希望" readonly />
+        </div>
+		<p class="mt-3">ご希望・ご相談はこちら</p>
+        <div>
+        <textarea class="form-control w-100"  type="textarea" id="exampleFormControlTextarea1" rows="3" name="remarks" value=""></textarea>
+        </div>
+		
+        <input type="submit" class="mt-4 btn btn-primary" value="送信">
+    	</form>
+
+   		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    	<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+ 
+	<script>
+
+        $(document).ready(function () {
+            const liffId = "1657603642-PmNaMwNa";
+            initializeLiff(liffId);
+        })
+
+        function initializeLiff(liffId) {
+            liff.init({
+                liffId: liffId
+            }).then(() => {
+                initializeApp();
+            }).catch((err) => {
+                console.log('LIFF Initialization failed ', err);
+            });
+        }
+
+        function sendText(text) {
+            liff.sendMessages([{
+                'type': 'text',
+                'text': text
+            }]).then(function () {
+                liff.closeWindow();
+            }).catch(function (error) {
+                window.alert('Failed to send message ' + error);
+            });
+        }
+
+        const params = (new URL(document.location)).searchParams;
+        const key = params.get('key');
+
+        $(function () {
+            $('form').submit(function () {
+                const name = $('input[name="name"]').val();
+                const phone = $('input[name="phone"]').val();
+                const smenu  = $('select[name="smenu"]').val();
+                const stylist  = $('select[name="stylist"]').val();
+                const schedule = $('input[name="schedule"]').val();
+				const schedule2 = $('input[name="schedule2"]').val();
+				const schedule3 = $('input[name="schedule3"]').val();
+				const remarks = $('textarea[name="remarks"]').val();
+                const msg = `${name} 様\n${phone}\n${smenu}\n${stylist}\n${schedule}\n${schedule2}\n${schedule3}\n${remarks}\n\nご入力ありがとうございます。\n日時が確定しましたら、\n担当よりご連絡をさせて頂きます。\n今しばらくお待ちくださいませ。\n\nSou-i hair face＆eye`;
+                sendText(msg);
+                return false;
+            });
+        });
+
+    </script>
+	
+	<script src="jquery.datetimepicker.js">
+	</script>
+	<script>
+	(function( $ ) {
+		$( 'input#schedule' ).datetimepicker({
+			lang: 'ja'
+		});
+	})( jQuery );
+</script>
+		<script>
+	(function( $ ) {
+		$( 'input#schedule2' ).datetimepicker({
+			lang: 'ja'
+		});
+	})( jQuery );
+</script>
+	<script>
+	(function( $ ) {
+		$( 'input#schedule3' ).datetimepicker({
+			lang: 'ja'
+		});
+	})( jQuery );
+</script>
+	
+
+</body>
+</html>
