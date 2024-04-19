@@ -1459,7 +1459,7 @@
 
 						if (options.minDate !== false) {
 							minDate = _xdsoft_datetime.strToDate(options.minDate);
-							minDate = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+							minDate = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()+1);
 						}
 
 						while (i < _xdsoft_datetime.currentTime.countDaysInMonth() || start.getDay() !== options.dayOfWeekStart || _xdsoft_datetime.currentTime.getMonth() === start.getMonth()) {
