@@ -512,7 +512,14 @@
 		highlightedPeriods: [],
 		disabledDates : [],
 		yearOffset: 0,
-		beforeShowDay: null,
+				beforeShowDay: function (date) {
+		//日曜(0)または土曜(6)のとき
+		if (date.getDay() == 1 || date.getDay() == 1) {
+			return [false, "ui-state-disabled"];
+		}else{
+			return [true, ""];
+		}
+	},
 
 		enterLikeTab: true,
         showApplyButton: false
